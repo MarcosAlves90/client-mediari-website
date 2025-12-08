@@ -1,8 +1,11 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
+  import { ref } from 'vue'
   import ContactCard from '~/components/page-index/molecules/ContactCard.vue'
   import { useContacts } from '~/utils/useContacts'
   import { useHomepageStyles } from '~/composables/page-index/useHomepageStyles'
+  import DropdownMenu from '@/components/molecules/DropdownMenu.vue'
+  import { CONTACT_INFO } from '~/constants'
 
   const { t } = useI18n()
   const { openPhoneDialer, openMailTo, openLinkInBrowser } = useContacts()
@@ -12,6 +15,8 @@
     homepage__section_subtitle,
     homepage__section_description,
   } = useHomepageStyles()
+
+  const showWhatsappMenu = ref(false)
 </script>
 
 <template>
@@ -54,9 +59,9 @@
           backgroundImage="instagram_g4nm4d_vkd5ws.webp"
           iconImage="instagram"
           :buttonText="t('contact.instagram')"
+          shortButtonText="Instagram"
           :buttonAction="
-            () =>
-              openLinkInBrowser('https://www.instagram.com/mediari.consultoria')
+            () => openLinkInBrowser(CONTACT_INFO.socialMedia.instagram.link)
           "
           role="listitem"
           aria-label="Contato pelo Instagram"
@@ -66,15 +71,56 @@
           backgroundImage="telefone_bluhgk_p8rms9.webp"
           iconImage="telefone"
           :buttonText="t('contact.phone')"
+          shortButtonText="Telefone"
           :buttonAction="openPhoneDialer"
           role="listitem"
           aria-label="Contato por telefone"
         />
 
+        <div class="relative w-full" ref="whatsappDropdownContainer">
+          <ContactCard
+            backgroundImage="whatsapp-print_dinoqb.jpg"
+            :imgModifiers="{ c: 'crop', h: 350, w: 309, g: 'north' }"
+            iconImage="whatsapp"
+            buttonText="WhatsApp"
+            shortButtonText="WhatsApp"
+            :buttonAction="
+              (e: Event) => {
+                e.stopPropagation()
+                showWhatsappMenu = !showWhatsappMenu
+              }
+            "
+            :dropdownState="showWhatsappMenu ? 1 : 0"
+            role="listitem"
+            aria-label="Contato por WhatsApp"
+          >
+            <template #dropdown>
+              <DropdownMenu
+                :isOpen="showWhatsappMenu"
+                @close="showWhatsappMenu = false"
+              >
+                <a
+                  v-for="wa in CONTACT_INFO.whatsapp"
+                  :key="wa.display"
+                  :href="wa.link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="px-1 py-1 text-sm text-gray-700 hover:bg-accent-color/20 hover:text-accent-color transition-colors duration-200 no-underline flex items-center gap-0.5"
+                  @click="showWhatsappMenu = false"
+                >
+                  <Icon name="mdi:whatsapp" class="text-green-600 text-lg" />
+                  {{ wa.display }}
+                </a>
+              </DropdownMenu>
+            </template>
+          </ContactCard>
+        </div>
+
         <ContactCard
           backgroundImage="gmail_itiiyf_qn4gk0.webp"
           iconImage="gmail"
           :buttonText="t('contact.email')"
+          shortButtonText="E-mail"
           :buttonAction="openMailTo"
           role="listitem"
           aria-label="Contato por e-mail"
@@ -84,16 +130,43 @@
           backgroundImage="linkedin_jbmidd_faecil.webp"
           iconImage="linkedin"
           :buttonText="t('contact.linkedin')"
+          shortButtonText="LinkedIn"
           :buttonAction="
-            () =>
-              openLinkInBrowser(
-                'https://www.linkedin.com/company/mediari-consultoria-empresarial-ltda'
-              )
+            () => openLinkInBrowser(CONTACT_INFO.socialMedia.linkedin.link)
           "
           role="listitem"
           aria-label="Contato pelo LinkedIn"
+          class="max-md:col-span-2 linkedin-card"
         />
       </div>
     </div>
   </section>
 </template>
+
+<style scoped>
+  .dropdown-fade-enter-active,
+  .dropdown-fade-leave-active {
+    transition:
+      opacity 0.2s ease-in-out,
+      transform 0.2s ease-in-out;
+  }
+
+  .dropdown-fade-enter-from,
+  .dropdown-fade-leave-to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.95);
+  }
+
+  .dropdown-fade-enter-to,
+  .dropdown-fade-leave-from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  @media (max-width: 767px) {
+    :deep(.linkedin-card .contact-card__square) {
+      aspect-ratio: 2/1;
+      height: auto !important;
+    }
+  }
+</style>
