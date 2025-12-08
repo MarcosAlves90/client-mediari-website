@@ -3,6 +3,8 @@
   import { useI18n } from 'vue-i18n'
   import { useContacts } from '@/utils/useContacts'
   import { useScreenWidth } from '@/utils/useScreenWidth'
+  import DropdownMenu from '@/components/molecules/DropdownMenu.vue'
+  import { CONTACT_INFO } from '~/constants'
 
   const { t } = useI18n()
   import { useLocalePathSafe } from '~/composables/useLocalePathSafe'
@@ -18,7 +20,6 @@
   const { onNavClick } = defineProps<Props>()
 
   const sectionsDropdownOpen = ref(false)
-  const dropdownRef = ref<HTMLElement | null>(null)
 
   const sectionLinks = computed(() => [
     { label: t('navbar.services'), section: 'services-section' },
@@ -42,15 +43,6 @@
     sectionsDropdownOpen.value = false
   }
 
-  const handleClickOutside = (event: MouseEvent) => {
-    const target = event.target as Element
-    if (!sectionsDropdownOpen.value) return
-    if (!dropdownRef.value) return
-    if (!dropdownRef.value.contains(target)) {
-      sectionsDropdownOpen.value = false
-    }
-  }
-
   const handleKeydown = (event: KeyboardEvent) => {
     if (event.key === 'Escape' || event.key === 'Esc') {
       sectionsDropdownOpen.value = false
@@ -58,12 +50,10 @@
   }
 
   onMounted(() => {
-    document.addEventListener('click', handleClickOutside)
     document.addEventListener('keydown', handleKeydown)
   })
 
   onUnmounted(() => {
-    document.removeEventListener('click', handleClickOutside)
     document.removeEventListener('keydown', handleKeydown)
   })
 </script>
@@ -86,7 +76,7 @@
     <!-- Dropdown de Seções -->
     <div class="relative" ref="dropdownRef">
       <button
-        @click="toggleSectionsDropdown"
+        @click.stop="toggleSectionsDropdown"
         :aria-expanded="sectionsDropdownOpen"
         aria-haspopup="menu"
         :aria-controls="'sections-menu'"
@@ -100,15 +90,11 @@
         />
       </button>
 
-      <Transition name="dropdown-fade">
-        <div
-          v-show="sectionsDropdownOpen"
-          id="sections-menu"
-          role="menu"
-          class="absolute top-full left-1/2 transform -translate-x-1/2 mt-3 rounded bg-body-bg shadow-lg border-2 z-50 transition duration-200 ease-in-out"
-          @click="closeSectionsDropdown"
-        >
-          <div class="h-0.5 bg-accent-color" />
+      <DropdownMenu
+        :isOpen="sectionsDropdownOpen"
+        @close="closeSectionsDropdown"
+      >
+        <div id="sections-menu" role="menu" class="flex flex-col">
           <a
             v-for="(link, idx) in sectionLinks"
             :key="`sections-${idx}`"
@@ -119,9 +105,8 @@
           >
             {{ link.label }}
           </a>
-          <div class="h-0.5 bg-accent-color" />
         </div>
-      </Transition>
+      </DropdownMenu>
     </div>
 
     <a
@@ -137,13 +122,13 @@
       v-if="screenWidth >= 1280"
       class="app-header__nav-button common-button"
       @click.prevent="openPhoneDialer"
-      :aria-label="t('navbar.callPhone', { phone: '11 4227-3008' })"
+      :aria-label="t('navbar.callPhone', { phone: CONTACT_INFO.phone.display })"
     >
       <Icon
         class="app-header__nav-button-icon text-[1.3rem]"
         name="mdi:phone-outline"
       />
-      11 4227-3008
+      {{ CONTACT_INFO.phone.display }}
     </button>
   </nav>
 </template>
@@ -160,24 +145,5 @@
 
   .app-header__nav--desktop a::after {
     transition: width 0.2s ease-in-out;
-  }
-
-  .dropdown-fade-enter-active,
-  .dropdown-fade-leave-active {
-    transition:
-      opacity 0.2s ease-in-out,
-      transform 0.2s ease-in-out;
-  }
-
-  .dropdown-fade-enter-from,
-  .dropdown-fade-leave-to {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.95);
-  }
-
-  .dropdown-fade-enter-to,
-  .dropdown-fade-leave-from {
-    opacity: 1;
-    transform: translateY(0) scale(1);
   }
 </style>
