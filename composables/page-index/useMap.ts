@@ -11,7 +11,7 @@ export const useMap = () => {
 
       const redIcon = new L.Icon({
         iconUrl:
-          'https://res.cloudinary.com/dawhjravc/image/upload/marker-icon-2x-red_tpormo_vyst4k.png',
+          'https://res.cloudinary.com/dawhjravc/image/upload/f_auto,q_auto/marker-icon-2x-red_tpormo_vyst4k.png',
         shadowUrl:
           'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
         iconSize: [25, 41],

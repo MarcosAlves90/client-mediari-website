@@ -135,7 +135,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: url('https://res.cloudinary.com/dawhjravc/image/upload/card-background_jp4akg_rbjplo.webp')
+      background: url('https://res.cloudinary.com/dawhjravc/image/upload/f_auto,q_auto/card-background_jp4akg_rbjplo.webp')
         center / cover no-repeat;
       filter: blur(5px) brightness(0.7);
       opacity: 0;

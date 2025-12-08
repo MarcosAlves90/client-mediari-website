@@ -146,6 +146,10 @@ export default defineNuxtConfig({
   image: {
     cloudinary: {
       baseURL: 'https://res.cloudinary.com/dawhjravc/image/upload',
+      modifiers: {
+        format: 'auto',
+        quality: 'auto',
+      },
     },
   },
 
