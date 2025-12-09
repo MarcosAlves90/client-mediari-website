@@ -84,7 +84,7 @@
       provider="cloudinary"
       width="1920"
       height="1080"
-      sizes="xl:100vw lg:80vw"
+      sizes="100vw sm:100vw md:100vw lg:100vw xl:100vw"
       preload
       fit="cropping"
       :alt="t('banner.aria.background_alt')"

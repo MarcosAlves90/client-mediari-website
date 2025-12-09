@@ -102,15 +102,18 @@
     if (!id) return
     try {
       isDeleting.value = true
-      const resp = (await $fetch(
-        `/api/admin/candidates?id=${encodeURIComponent(id)}`,
-        {
-          method: 'DELETE',
-        }
-      )) as {
+      // Cast URL to any to avoid TS2321 excessive stack depth error
+      const resp = await $fetch<{
         success?: boolean
         deletedFiles?: Array<{ path: string; ok: boolean; error?: string }>
-      }
+      }>(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        '/api/admin/candidates' as any,
+        {
+          method: 'DELETE',
+          query: { id },
+        }
+      )
 
       if (resp?.deletedFiles && Array.isArray(resp.deletedFiles)) {
         const failed = resp.deletedFiles.filter((f) => !f.ok)

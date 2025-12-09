@@ -34,7 +34,7 @@ function getStorageBucket(): string | undefined {
 function isRunningInEmulator(): boolean {
   return Boolean(
     process.env.FIRESTORE_EMULATOR_HOST ||
-    process.env.FIREBASE_STORAGE_EMULATOR_HOST
+      process.env.FIREBASE_STORAGE_EMULATOR_HOST
   );
 }
 

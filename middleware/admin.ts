@@ -14,8 +14,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
       // usa composable seguro
       try {
         // Import dinâmico aqui dentro do middleware (evita erro quando não existir)
-        const { useLocalePathSafe } =
-          await import('~/composables/useLocalePathSafe');
+        const { useLocalePathSafe } = await import(
+          '~/composables/useLocalePathSafe'
+        );
         const lp = useLocalePathSafe();
         return navigateTo(lp('/admin'));
       } catch {
@@ -26,8 +27,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
   } catch {
     // Se ocorrer qualquer erro, tenta redirecionar preservando locale quando possível
     try {
-      const { useLocalePathSafe } =
-        await import('~/composables/useLocalePathSafe');
+      const { useLocalePathSafe } = await import(
+        '~/composables/useLocalePathSafe'
+      );
       const lp = useLocalePathSafe();
       return navigateTo(lp('/admin'));
     } catch {

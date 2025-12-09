@@ -38,10 +38,17 @@ export const useCandidateService = () => {
 
       let storagePath: string | undefined = undefined;
       if (resumeFile) {
-        const uploadResp = (await $fetch('/api/careers/upload-url', {
-          method: 'POST',
-          body: { fileName: resumeFile.name, contentType: resumeFile.type },
-        })) as { uploadUrl: string; storagePath: string };
+        const uploadResp = await $fetch<{
+          uploadUrl: string;
+          storagePath: string;
+        }>(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          '/api/careers/upload-url' as any,
+          {
+            method: 'POST',
+            body: { fileName: resumeFile.name, contentType: resumeFile.type },
+          }
+        );
 
         // upload via XHR to get progress
         await new Promise<void>((resolve, reject) => {
@@ -111,10 +118,14 @@ export const useCandidateService = () => {
         storagePath: storagePath || undefined,
       } as Record<string, unknown>;
 
-      const submitResp = (await $fetch('/api/careers/submit', {
-        method: 'POST',
-        body: submitPayload,
-      })) as { candidateId?: string };
+      const submitResp = await $fetch<{ candidateId?: string }>(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        '/api/careers/submit' as any,
+        {
+          method: 'POST',
+          body: submitPayload,
+        }
+      );
 
       return { candidateId: submitResp.candidateId };
     } catch (err: unknown) {
@@ -131,7 +142,11 @@ export const useCandidateService = () => {
 
     try {
       const payload = profile as unknown as Record<string, unknown>;
-      await $fetch('/api/careers/profile', { method: 'POST', body: payload });
+      await $fetch(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        '/api/careers/profile' as any,
+        { method: 'POST', body: payload }
+      );
       return { ok: true };
     } catch (err: unknown) {
       error.value = err as Error;

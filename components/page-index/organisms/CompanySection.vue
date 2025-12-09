@@ -36,7 +36,7 @@
       >
         <NuxtImg
           src="/predio-439_jd1vig_gjatw0.webp"
-          sizes="(max-width: 1280px) 100vw, 300px"
+          sizes="xs:100vw sm:100vw md:100vw lg:100vw xl:300px"
           provider="cloudinary"
           title="Prédio onde está localizado o escritório da Mediari Consultoria"
           alt="Foto do prédio onde está localizado o escritório da Mediari Consultoria"

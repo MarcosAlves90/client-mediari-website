@@ -11,7 +11,6 @@
   const { goTo } = useGoTo()
 
   const isNavbarSmall = ref(false)
-  const mobileNavRef = ref<InstanceType<typeof MobileNav>>()
 
   import { useLocalePathSafe } from '~/composables/useLocalePathSafe'
   const localePath = useLocalePathSafe()

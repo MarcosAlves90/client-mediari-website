@@ -17,8 +17,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
     const res = await $fetch('/api/session');
     if (res && res.authenticated) {
       // Usa o composable seguro que lida com a ausência do helper auto-importado
-      const { useLocalePathSafe } =
-        await import('~/composables/useLocalePathSafe');
+      const { useLocalePathSafe } = await import(
+        '~/composables/useLocalePathSafe'
+      );
       const localePath = useLocalePathSafe();
       return navigateTo(localePath('/admin/candidaturas'));
     }
