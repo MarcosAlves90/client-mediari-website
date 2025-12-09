@@ -58,6 +58,7 @@
             provider="cloudinary"
             :alt="`Foto do membro da equipe ${getNome(img)}`"
             :title="`${getNome(img)} - Mediari Consultoria`"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 300px"
             class="w-full h-full object-cover object-top"
           />
           <div
